@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/d432afea-9680-44af-b5b7-6967919419f4/resourceGroups/cap/providers/Microsoft.Web/sites/cap-url-shortner",
+    "appService.deploySubpath": "."
+}

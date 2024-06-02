@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
+
 namespace UrlShortner
 {
     public class Program
@@ -9,6 +12,10 @@ namespace UrlShortner
             // Add services to the container.
 
             builder.Services.AddControllers();
+            
+            // Add authentication
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
             var app = builder.Build();
 
