@@ -22,5 +22,31 @@ namespace UrlShortner.Controllers
             Console.WriteLine($"request to create: {id}, {body.GetProperty("url")}");
             return "https://shortUrl.com";
         }
+
+        [HttpDelete("{id}")]
+        public string DeleteShortUrl(string id)
+        {
+            Console.WriteLine($"request to delete: {id}");
+            return "deleted!";
+        }
+
+        [HttpGet("{id}")]
+        public string GetShortUrl(string id)
+        {
+            Console.WriteLine($"request to get: {id}");
+            return "shortUrl";
+        }
+
+        [HttpGet]
+        public List<string> List()
+        {
+            Console.WriteLine($"request to list");
+
+            return
+            [
+                "url1",
+                "url2"
+            ];
+        }
     }
 }
