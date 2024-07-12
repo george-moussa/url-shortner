@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UrlShortener.Models;
 
 namespace UrlShortner.Controllers;
 
@@ -10,6 +11,11 @@ namespace UrlShortner.Controllers;
 [Route("[controller]")]
 public class ShortUrlsController : ControllerBase
 {
+    private readonly UrlShortenerContext _context;
+    public ShortUrlsController(UrlShortenerContext context)
+    {
+        _context = context;
+    }
     [Authorize(Policy = "AddCustomer")]
     [HttpPut("{id}")]
     public string CreateShortUrl(string id, [FromBody] JsonElement body)
@@ -30,8 +36,27 @@ public class ShortUrlsController : ControllerBase
     [HttpGet("{id}")]
     public string GetShortUrl(string id)
     {
-        Console.WriteLine($"request to get: {id}");
-        return "shortUrl";
+        var url = _context.Urls.SingleOrDefault(u => u.UrlId == id);
+
+        if (url == null)
+        {
+            return "Shortened URL not found.";
+        }
+
+        return url.ShortenedUrl;
+    }
+    [AllowAnonymous]
+    [HttpGet("original/url/{shortUrl}")]
+    public string GetOriginalUrl(string shortUrl)
+    {
+        var url = _context.Urls.SingleOrDefault(u => u.ShortenedUrl == shortUrl);
+
+        if (url == null)
+        {
+            return "Shortened URL not found.";
+        }
+
+        return url.OriginalUrl;
     }
 
     [HttpGet]
