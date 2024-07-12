@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Models;
+using UrlShortner.Models;
 
 namespace UrlShortner.Controllers;
 
@@ -16,12 +17,25 @@ public class ShortUrlsController : ControllerBase
     {
         _context = context;
     }
-    [Authorize(Policy = "AddCustomer")]
+    
     [HttpPut("{id}")]
     public string CreateShortUrl(string id, [FromBody] JsonElement body)
     {
+        var domainName = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
+
         Console.WriteLine($"request to create: {id}, {body.GetProperty("url")}");
-        return "https://shortUrl.com";
+        Url url = new()
+        {
+            OriginalUrl = body.GetProperty("url").ToString(),
+            ShortenedUrl = $"{domainName}/navigate/{Guid.NewGuid()}",
+            UrlId = id,
+            UserId = 0
+        };
+
+        _context.Urls.Add(url);
+        _context.SaveChanges();
+
+        return url.ShortenedUrl;
     }
 
     [Authorize(Roles = "Emperor,Deacon")]
@@ -29,45 +43,35 @@ public class ShortUrlsController : ControllerBase
     public string DeleteShortUrl(string id)
     {
         Console.WriteLine($"request to delete: {id}");
-        return "deleted!";
+
+        var url = _context.Urls.FirstOrDefault(u => string.Equals(u.UrlId, id, StringComparison.OrdinalIgnoreCase));
+        if (url != null)
+        {
+            _context.Remove(url);
+            _context.SaveChanges();
+            return "deleted!";
+        }
+
+        return "not found!";
     }
 
     [AllowAnonymous]
     [HttpGet("{id}")]
-    public string GetShortUrl(string id)
+    public Url GetShortUrl(string id)
     {
         var url = _context.Urls.SingleOrDefault(u => u.UrlId == id);
 
         if (url == null)
         {
-            return "Shortened URL not found.";
+            return null;
         }
 
-        return url.ShortenedUrl;
-    }
-    [AllowAnonymous]
-    [HttpGet("original/url/{shortUrl}")]
-    public string GetOriginalUrl(string shortUrl)
-    {
-        var url = _context.Urls.SingleOrDefault(u => u.ShortenedUrl == shortUrl);
-
-        if (url == null)
-        {
-            return "Shortened URL not found.";
-        }
-
-        return url.OriginalUrl;
+        return url;
     }
 
     [HttpGet]
-    public List<string> List()
+    public List<Url> List()
     {
-        Console.WriteLine($"request to list");
-
-        return
-        [
-            "url1",
-            "url2"
-        ];
+        return _context.Urls.ToList();
     }
 }
