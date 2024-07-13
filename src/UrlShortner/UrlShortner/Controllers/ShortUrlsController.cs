@@ -38,13 +38,12 @@ public class ShortUrlsController : ControllerBase
         return url.ShortenedUrl;
     }
 
-    [Authorize(Roles = "Emperor,Deacon")]
     [HttpDelete("{id}")]
     public string DeleteShortUrl(string id)
     {
         Console.WriteLine($"request to delete: {id}");
 
-        var url = _context.Urls.FirstOrDefault(u => string.Equals(u.UrlId, id, StringComparison.OrdinalIgnoreCase));
+        var url = _context.Urls.FirstOrDefault(u => string.Equals(u.UrlId, id));
         if (url != null)
         {
             _context.Remove(url);
@@ -55,7 +54,6 @@ public class ShortUrlsController : ControllerBase
         return "not found!";
     }
 
-    [AllowAnonymous]
     [HttpGet("{id}")]
     public Url GetShortUrl(string id)
     {

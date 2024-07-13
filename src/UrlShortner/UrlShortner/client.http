@@ -1,9 +1,9 @@
 #@host = https://geoapp2.azurewebsites.net/
 @host = http://localhost:5209
 
-# http://localhost:5097/shortUrls/urlId1
+#@host = https://cap-url-shortner.azurewebsites.net/
+
 # API: Get short url
-# This call should retrun a string "http://localhost:5097/navigate/ge123"
 GET {{host}}/shortUrls/urlId1
 Accept: application/json
 Authorization: Basic david.lee@example.com:securepass
@@ -18,8 +18,7 @@ Authorization: Basic david.lee@example.com:securepass
 ###
 
 # API: Create or update short url
-# This call should return a string "http://localhost:5097/navigate/ge123"
-PUT {{host}}/shortUrls/urlId2
+PUT {{host}}/shortUrls/urlId3
 Accept: application/json
 Content-Type: application/json
 Authorization: Basic david.lee@example.com:securepass
@@ -31,20 +30,17 @@ Authorization: Basic david.lee@example.com:securepass
 ###
 
 # API: delete short url
-# This call should return empty body
-DELETE {{host}}/shortUrls/urlId1
+DELETE {{host}}/shortUrls/urlId3
 Accept: application/json
+Authorization: Basic david.lee@example.com:securepass
 
 ###
 
 # API: Get number of hits
-# this call should return an integer
 GET {{host}}/shortUrls/urlId1/hits
 Accept: application/json
 
 ###
 # API: navigate to shortUrl
-# this call should redirect the user to www.google.com
-# for how to do that, check https://stackoverflow.com/questions/52308563/redirect-to-url-in-asp-net-core
 GET {{host}}/navigate/ge123
 Accept: application/json
