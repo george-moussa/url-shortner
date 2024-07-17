@@ -1,10 +1,10 @@
 #@host = https://geoapp2.azurewebsites.net/
-@host = http://localhost:5209
+#@host = http://localhost:5209
 
-#@host = https://cap-url-shortner.azurewebsites.net/
+@host = https://cap-url-shortner.azurewebsites.net/
 
 # API: Get short url
-GET {{host}}/shortUrls/urlId1
+GET {{host}}/shortUrls/urlId3
 Accept: application/json
 Authorization: Basic david.lee@example.com:securepass
 
