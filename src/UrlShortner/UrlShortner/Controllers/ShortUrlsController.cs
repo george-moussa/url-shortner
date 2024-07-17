@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Models;
@@ -7,7 +6,7 @@ using UrlShortner.Models;
 
 namespace UrlShortner.Controllers;
 
-[Authorize(AuthenticationSchemes = $"{JwtBearerDefaults.AuthenticationScheme},BasicAuthentication")]
+[Authorize(AuthenticationSchemes = $"BasicAuthentication")]
 [ApiController]
 [Route("[controller]")]
 public class ShortUrlsController : ControllerBase

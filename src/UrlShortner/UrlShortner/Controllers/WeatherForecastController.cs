@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortner.Models;
@@ -6,7 +5,7 @@ using UrlShortner.Models;
 namespace UrlShortner.Controllers;
 
 // SM: The authorization schemes is what determines if it accepts OAuth, Basic authentication or both
-[Authorize(AuthenticationSchemes = $"{JwtBearerDefaults.AuthenticationScheme},BasicAuthentication")]
+[Authorize(AuthenticationSchemes = $"BasicAuthentication")]
 [ApiController]
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
